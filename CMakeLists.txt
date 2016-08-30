@@ -83,8 +83,8 @@ IF(NOT CYCLUS_DOC_ONLY)
     # Find cyclus
     FIND_PACKAGE(Cyclus REQUIRED)
     SET(
-      CYCAMORE_INCLUDE_DIRS 
-      ${CYCAMORE_INCLUDE_DIRS} 
+      CYCAMORE_INCLUDE_DIRS
+      ${CYCAMORE_INCLUDE_DIRS}
       ${CYCLUS_CORE_INCLUDE_DIR} # INSTALL_PATH/include/cyclus
       )
     SET(LIBS ${LIBS} ${CYCLUS_CORE_LIBRARIES})
@@ -146,6 +146,57 @@ IF(NOT CYCLUS_DOC_ONLY)
     SET(LIBS ${LIBS} ${SQLITE3_LIBRARIES})
     MESSAGE("--    SQLITE3 Include directories: ${SQLITE3_INCLUDE_DIR}")
     MESSAGE("--    SQLITE3 Libraries: ${SQLITE3_LIBRARIES}")
+
+    # Some optional libraries to link in, as availble. Required for conda.
+    #
+    # pcre
+    FIND_LIBRARY(PCRE_LIBRARIES pcre ${DEPS_LIB_HINTS})
+    MESSAGE("-- Found PCRE Libraries (optional): ${PCRE_LIBRARIES}")
+    IF(PCRE_LIBRARIES)
+        set(LIBS ${LIBS} ${PCRE_LIBRARIES})
+    ENDIF(PCRE_LIBRARIES)
+
+    # openblas
+    FIND_LIBRARY(OPENBLAS_LIBRARIES openblas ${DEPS_LIB_HINTS})
+    MESSAGE("-- Found OPENBLAS Libraries (optional): ${OPENBLAS_LIBRARIES}")
+    IF(OPENBLAS_LIBRARIES)
+        set(LIBS ${LIBS} ${OPENBLAS_LIBRARIES})
+    ENDIF(OPENBLAS_LIBRARIES)
+
+    # ClpSolver
+    FIND_LIBRARY(CLPSOLVER_LIBRARIES ClpSolver ${DEPS_LIB_HINTS})
+    MESSAGE("-- Found CLPSOLVER Libraries (optional): ${CLPSOLVER_LIBRARIES}")
+    IF(CLPSOLVER_LIBRARIES)
+        set(LIBS ${LIBS} ${CLPSOLVER_LIBRARIES})
+    ENDIF(CLPSOLVER_LIBRARIES)
+
+    # iconv
+    FIND_LIBRARY(ICONV_LIBRARIES iconv ${DEPS_LIB_HINTS})
+    MESSAGE("-- Found ICONV Libraries (optional): ${ICONV_LIBRARIES}")
+    IF(ICONV_LIBRARIES)
+        set(LIBS ${LIBS} ${ICONV_LIBRARIES})
+    ENDIF(ICONV_LIBRARIES)
+
+    # icudata
+    FIND_LIBRARY(ICUDATA_LIBRARIES icudata ${DEPS_LIB_HINTS})
+    MESSAGE("-- Found ICUDATA Libraries (optional): ${ICUDATA_LIBRARIES}")
+    IF(ICUDATA_LIBRARIES)
+        set(LIBS ${LIBS} ${ICUDATA_LIBRARIES})
+    ENDIF(ICUDATA_LIBRARIES)
+
+    # icui18n
+    FIND_LIBRARY(ICUI18N_LIBRARIES icui18n ${DEPS_LIB_HINTS})
+    MESSAGE("-- Found ICUI18N Libraries (optional): ${ICUI18N_LIBRARIES}")
+    IF(ICUI18N_LIBRARIES)
+        set(LIBS ${LIBS} ${ICUI18N_LIBRARIES})
+    ENDIF(ICUI18N_LIBRARIES)
+
+    # icuuc
+    FIND_LIBRARY(ICUUC_LIBRARIES icuuc ${DEPS_LIB_HINTS})
+    MESSAGE("-- Found ICUUC Libraries (optional): ${ICUUC_LIBRARIES}")
+    IF(ICUUC_LIBRARIES)
+        set(LIBS ${LIBS} ${ICUUC_LIBRARIES})
+    ENDIF(ICUUC_LIBRARIES)
 
     # include all the directories we just found
     INCLUDE_DIRECTORIES(${CYCAMORE_INCLUDE_DIRS})
@@ -234,7 +285,7 @@ IF(NOT CYCLUS_DOC_ONLY)
     ##############################################################################################
     ################################## begin uninstall target ####################################
     ##############################################################################################
- 
+
     CONFIGURE_FILE(
         "${CMAKE_CURRENT_SOURCE_DIR}/config/cmake_uninstall.cmake.in"
         "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
@@ -247,15 +298,15 @@ IF(NOT CYCLUS_DOC_ONLY)
     ##############################################################################################
     ################################### end uninstall target #####################################
     ##############################################################################################
- 
+
     ##############################################################################################
     ####################################### begin cpack ##########################################
     ##############################################################################################
-    
-    
+
+
     # Here's where we package it with CPack
     SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Cycamore : The Cyclus Additional Module Repository.")
-    
+
     # Here we set some components for installation with cpack
     SET(CPACK_COMPONENTS_ALL cycamore testing libraries data core)
     SET(CPACK_GENERATOR "DEB")
@@ -265,12 +316,12 @@ IF(NOT CYCLUS_DOC_ONLY)
     SET(CPACK_PACKAGE_VENDOR "CNERG, UW-Madison")
     SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.rst")
     SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.rst")
-    
+
     # Version
     SET(CPACK_PACKAGE_VERSION_MAJOR "1")
     SET(CPACK_PACKAGE_VERSION_MINOR "4")
     SET(CPACK_PACKAGE_VERSION_PATCH "0")
-    
+
     # Dependencies
     SET(CPACK_DEBIAN_PACKAGE_DEPENDS "cyclus (>= 1.4.0)")
     SET(CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}, libtcmalloc-minimal4 (>= 2.1)")
@@ -281,13 +332,13 @@ IF(NOT CYCLUS_DOC_ONLY)
     SET(CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}, libxml++2.6-dev (>= 2.36.0)")
     SET(CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}, coinor-libcbc-dev (>= 2.8.7)")
     MESSAGE("CPACK_DEBIAN_PACKAGE_DEPENDS ${CPACK_DEBIAN_PACKAGE_DEPENDS}")
-    
+
     # Names
     SET(CPACK_PACKAGE_NAME "cycamore")
     SET(CPACK_PACKAGE_INSTALL_DIRECTORY "cycamore_${CPACK_PACKAGE_VERSION_MAJOR}")
     SET(CPACK_PACKAGE_INSTALL_DIRECTORY "${CPACK_PACKAGE_INSTALL_DIRECTORY}.${CPACK_PACKAGE_VERSION_MINOR}")
     SET(CPACK_PACKAGE_INSTALL_DIRECTORY "${CPACK_PACKAGE_INSTALL_DIRECTORY}.${CPACK_PACKAGE_VERSION_PATCH}")
-    
+
     SET(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}")
     SET(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_FILE_NAME}_${CPACK_PACKAGE_VERSION_MAJOR}")
     SET(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_FILE_NAME}.${CPACK_PACKAGE_VERSION_MINOR}")
@@ -310,7 +361,7 @@ IF(NOT CYCLUS_DOC_ONLY)
     SET(ROOT_DIR ${CYCLUS_ROOT_DIR})
     SET(PROJ_DIR ${PROJECT_BINARY_DIR})
     SET(CORE_SHARE_DIR ${CYCLUS_CORE_SHARE_DIR})
-    
+
     ##############################################################################################
     ######################################## end cpack ###########################################
     ##############################################################################################
